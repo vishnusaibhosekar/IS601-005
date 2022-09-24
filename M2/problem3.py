@@ -18,8 +18,7 @@ def process_array(num, arr):
         if(type(var) in [int, float]):
             result.append(abs(var))
         else:
-            var = var[1:] if var.__contains__("-") else var
-            result.append(var)
+            result.append(var[1:] if var.__contains__("-") else var)
     print(result)
 
 
