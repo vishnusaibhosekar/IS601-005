@@ -1,3 +1,4 @@
+import string
 from unittest import result
 
 
@@ -13,11 +14,12 @@ def process_array(num, arr):
     print("\nPositive Output:\n")
     # TODO add new code here to print the desired result
     result = []
-    for num in arr:
-        if(type(num) in [int, float]):
-            result.append(abs(num))
+    for var in arr:
+        if(type(var) in [int, float]):
+            result.append(abs(var))
         else:
-            result.append(abs(int(num)))
+            var = var[1:] if var.__contains__("-") else var
+            result.append(var)
     print(result)
 
 
