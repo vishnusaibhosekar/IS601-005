@@ -14,10 +14,12 @@ class Usable:
         self.quantity = quantity
         self.cost = cost
 
+    # UCID: vb434
+    # Date: 10/23/2022
     def use(self):
         self.quantity -= 1
         if (self.quantity < 0):
-            raise OutOfStockException
+            raise OutOfStockException(self.name)
         return self.quantity 
 
     def in_stock(self):
@@ -75,36 +77,40 @@ class IceCreamMachine:
 
     def pick_container(self, choice):
         for c in self.containers:
-            if c.name.lower() == choice:
+            if c.name.lower() == choice.lower():
                 c.use()
                 self.inprogress_icecream.append(c)
                 return
-        raise InvalidChoiceException
+        raise InvalidChoiceException(choice)
 
+    # UCID: vb434
+    # Date: 10/23/2022
     def pick_flavor(self, choice):
         if self.remaining_uses <= 0:
             raise NeedsCleaningException
         if self.remaining_scoops <= 0:
-            raise ExceededRemainingChoicesException
+            raise ExceededRemainingChoicesException('Scoop')
         for f in self.flavors:
-            if f.name.lower() == choice:
+            if f.name.lower() == choice.lower():
                 f.use()
                 self.inprogress_icecream.append(f)
                 self.remaining_scoops -= 1
                 self.remaining_uses -= 1
                 return
-        raise InvalidChoiceException
+        raise InvalidChoiceException(choice)
 
+    # UCID: vb434
+    # Date: 10/23/2022
     def pick_toppings(self, choice):
         if self.remaining_toppings <= 0:
-            raise ExceededRemainingChoicesException
+            raise ExceededRemainingChoicesException('Topping')
         for t in self.toppings:
-            if t.name.lower() == choice:
+            if t.name.lower() == choice.lower():
                 t.use()
                 self.inprogress_icecream.append(t)
                 self.remaining_toppings -= 1
                 return
-        raise InvalidChoiceException
+        raise InvalidChoiceException(choice)
 
     def reset(self):
         self.remaining_scoops = self.MAX_SCOOPS
@@ -116,33 +122,53 @@ class IceCreamMachine:
         self.remaining_uses = self.USES_UNTIL_CLEANING
         
     def handle_container(self, container):
-        self.pick_container(container)
-        self.currently_selecting = STAGE.Flavor
+        try:
+            self.pick_container(container)
+        except Exception as ex:
+            print(ex)
+        else:
+            self.currently_selecting = STAGE.Flavor
 
     def handle_flavor(self, flavor):
         if flavor == "next":
             self.currently_selecting = STAGE.Toppings
         else:
-            self.pick_flavor(flavor)
+            try:
+                self.pick_flavor(flavor)
+            except ExceededRemainingChoicesException as ex:
+                print(ex)
+                self.currently_selecting = STAGE.Toppings
+            except Exception as ex:
+                print(ex)
+            else:
+                self.currently_selecting = STAGE.Flavor
 
     def handle_toppings(self, toppings):
         if toppings == "done":
             self.currently_selecting = STAGE.Pay
         else:
-            self.pick_toppings(toppings)
+            try:
+                self.pick_toppings(toppings)
+            except ExceededRemainingChoicesException as ex:
+                print(ex)
+                self.currently_selecting = STAGE.Pay
+            except Exception as ex:
+                print(ex)
+            else:
+                self.currently_selecting = STAGE.Toppings
 
     def handle_pay(self, expected, total):
-        if total == str(expected):
-            print("Thank you! Enjoy your icecream!")
-            self.total_icecreams += 1
-            self.total_sales += expected # only if successful
-            self.reset()
-        else:
-            raise InvalidPaymentException
+        if total != expected:
+            raise InvalidPaymentException(total)
+        self.total_icecreams += 1
+        self.total_sales += float(expected) # only if successful
+        self.reset()
             
+            
+    # UCID: vb434
+    # Date: 10/23/2022
     def calculate_cost(self):
-        # TODO add the calculation expression/logic for the inprogress_icecream
-        return 10000
+        return '{0:.2f}'.format(sum(item.cost for item in self.inprogress_icecream))
 
     def run(self):
         if self.currently_selecting == STAGE.Container:
@@ -157,10 +183,14 @@ class IceCreamMachine:
         elif self.currently_selecting == STAGE.Pay:
             expected = self.calculate_cost()
             total = input(f"Your total is {expected}, please enter the exact value.\n")
-            self.handle_pay(expected, total)
-            choice = input("What would you like to do? (icecream or quit)\n")
-            if choice == "quit":
-                exit()
+            try:
+                self.handle_pay(expected, total)
+            except Exception as ex:
+                print(ex)
+            else:
+                choice = input("What would you like to do? (icecream or quit)\n")
+                if choice == "quit":
+                    exit()
         self.run()
 
     def start(self):
