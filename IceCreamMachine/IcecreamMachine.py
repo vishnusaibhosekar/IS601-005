@@ -182,7 +182,7 @@ class IceCreamMachine:
             self.handle_toppings(toppings)
         elif self.currently_selecting == STAGE.Pay:
             expected = self.calculate_cost()
-            total = input(f"Your total is {expected}, please enter the exact value.\n")
+            total = input(f"Your total is ${expected}, please enter the exact value.\n")
             try:
                 self.handle_pay(expected, total)
             except Exception as ex:
