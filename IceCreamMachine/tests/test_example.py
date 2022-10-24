@@ -92,6 +92,7 @@ def test_max_toppings(machine):
 # UCID: vb434
 # Date: 10/23/2022
 def test_total_cost(machine1):
+    machine1.reset()
     machine1.handle_container("cup")
     machine1.handle_flavor("vanilla")
     machine1.handle_flavor("chocolate")
@@ -101,7 +102,7 @@ def test_total_cost(machine1):
     machine1.handle_toppings("chocolate chips")
     machine1.handle_toppings("m&ms")
     machine1.handle_toppings("done")
-    assert machine1.calculate_cost() == '4.75'
+    assert machine1.calculate_cost() == '3.50'
 
 # UCID: vb434
 # Date: 10/23/2022
