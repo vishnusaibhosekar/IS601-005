@@ -12,7 +12,7 @@ def machine1():
 @pytest.fixture
 def first_order(machine):
     machine.handle_container("cup")
-    machine.handle_flavor("vanilla")
+    machine.handle_flavor("chocolate")
     machine.handle_flavor("next")
     machine.handle_toppings("done")
     machine.handle_pay(2.00,2.00)
@@ -21,7 +21,7 @@ def first_order(machine):
 @pytest.fixture
 def second_order(first_order, machine):
     machine.handle_container("cup")
-    machine.handle_flavor("vanilla")
+    machine.handle_flavor("strawberry")
     machine.handle_flavor("next")
     machine.handle_toppings("done")
     machine.handle_pay(2.00,2.00)
@@ -52,13 +52,13 @@ def test_flavour_in_stock(machine):
 # Date: 10/23/2022
 def test_toppings_in_stock(machine):
     # setting available quantity to 1 for testing convenience
-    machine.toppings[0].quantity = 1
+    machine.toppings[4].quantity = 1
     machine.handle_container("cup")
     machine.handle_flavor("next")
-    machine.handle_toppings("sprinkles")
+    machine.handle_toppings("peanuts")
     try:
-        machine.handle_toppings("sprinkles")
-        assert machine.toppings[0].quantity == -1
+        machine.handle_toppings("peanuts")
+        assert machine.toppings[4].quantity == -1
     except OutOfStockException:
         assert False
 
@@ -66,7 +66,7 @@ def test_toppings_in_stock(machine):
 # Date: 10/23/2022
 def test_max_scoops(machine):
     machine.handle_container("cup")
-    # loop to choose (maximum - 1) number of scoops
+    # loop to choose maximum number of scoops
     for _ in range(machine.MAX_SCOOPS - 1):
         machine.handle_flavor("chocolate")
     try:
@@ -80,11 +80,11 @@ def test_max_scoops(machine):
 def test_max_toppings(machine):
     machine.handle_container("cup")
     machine.handle_flavor("next")
-    # loop to choose (maximum - 1) number of toppings
+    # loop to choose maximum number of toppings
     for _ in range(machine.MAX_TOPPINGS - 1):
-        machine.handle_toppings("peanuts")
+        machine.handle_toppings("m&ms")
     try:
-        machine.handle_toppings("peanuts")
+        machine.handle_toppings("m&ms")
         assert machine.remaining_toppings == 0
     except ExceededRemainingChoicesException:
         assert False
@@ -96,13 +96,13 @@ def test_total_cost(machine1):
     machine1.handle_container("cup")
     machine1.handle_flavor("vanilla")
     machine1.handle_flavor("chocolate")
-    machine1.handle_flavor("strawberry")
+    machine1.handle_flavor("vanilla")
     machine1.handle_flavor("next")
     machine1.handle_toppings("sprinkles")
     machine1.handle_toppings("chocolate chips")
     machine1.handle_toppings("m&ms")
     machine1.handle_toppings("done")
-    assert machine1.calculate_cost() == '3.50'
+    assert machine1.calculate_cost() == '2.75'
 
 # UCID: vb434
 # Date: 10/23/2022
