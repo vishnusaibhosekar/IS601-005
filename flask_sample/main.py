@@ -17,7 +17,9 @@ def create_app(config_filename=''):
     with app.app_context():
         from views.hello import hello
         app.register_blueprint(hello)
-    return app
+        from views.sample import sample
+        app.register_blueprint(sample)
+        return app
 
 
 app = create_app()
