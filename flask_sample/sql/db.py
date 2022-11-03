@@ -22,7 +22,6 @@ class DBResponse:
 class DB:
     db = None
     def __runQuery(op, isMany, queryString, args = None):
-        # sourcery skip: assign-if-exp, boolean-if-exp-identity, instance-method-first-arg-name, merge-else-if-into-elif, raise-specific-error, remove-unnecessary-cast
         response = None
         try:
             db = DB.getDB()
@@ -62,11 +61,15 @@ class DB:
         return response 
 
     @staticmethod
+    def delete(queryString, *args):
+        return DB.__runQuery(CRUD.DELETE, False, queryString, args)
+        
+    @staticmethod
     def update(queryString, *args):
         return DB.__runQuery(CRUD.UPDATE, False, queryString, args)
 
     @staticmethod
-    def query(queryString):  # sourcery skip: raise-specific-error
+    def query(queryString):
         if "CREATE TABLE" in queryString.upper():
             return DB.__runQuery(CRUD.CREATE, False, queryString)
         elif queryString.upper().startswith("ALTER"):
@@ -99,7 +102,7 @@ class DB:
             DB.db = None
 
     @staticmethod
-    def getDB():  # sourcery skip: raise-specific-error, remove-unnecessary-else, swap-if-else-branches
+    def getDB():
         if DB.db is None:
             import mysql.connector
             import os
