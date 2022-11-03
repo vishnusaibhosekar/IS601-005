@@ -22,6 +22,7 @@ class DBResponse:
 class DB:
     db = None
     def __runQuery(op, isMany, queryString, args = None):
+        # sourcery skip: assign-if-exp, boolean-if-exp-identity, instance-method-first-arg-name, merge-else-if-into-elif, remove-unnecessary-cast
         response = None
         try:
             db = DB.getDB()
@@ -102,7 +103,7 @@ class DB:
             DB.db = None
 
     @staticmethod
-    def getDB():
+    def getDB():  # sourcery skip: remove-unnecessary-else, swap-if-else-branches
         if DB.db is None:
             import mysql.connector
             import os
