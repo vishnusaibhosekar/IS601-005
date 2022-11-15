@@ -21,7 +21,7 @@ def add():
     return render_template("add_sample.html")
 
 @sample.route('/list', methods=['GET'])
-def list():  # sourcery skip: merge-nested-ifs
+def list():
     key = request.args.get("name")
     col = request.args.get("col")
     order = request.args.get("order")
