@@ -1,6 +1,8 @@
 import glob
 import os
 
+
+
 from db import DB
 print(os.path.dirname(os.path.abspath(__file__)))
 mypath = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +22,8 @@ tables = DB.selectAll("SHOW TABLES")
 existing_tables = []
 # map to a 1D array for easy checking
 if tables.rows:
-    existing_tables.extend(list(t.values())[0] for t in tables.rows)
+    for t in tables.rows:
+        existing_tables.append(list(t.values())[0])
 
 # execute sql files
 db_calls = 1
@@ -38,11 +41,11 @@ for q in queries:
             print(f"Table {t} already exists, blocking query")
             continue
     try:
-        success = DB.query(sql)
+        result = DB.query(sql)
         db_calls += 1
-        print(f"Ran {'successfully' if success.status else 'unsuccessfully'}")
+        print(f"Ran {'successfully' if result.status else 'unsuccessfully'}")
     except Exception as e:
-        print("An error occurred (some may be expected)", e)
+        print("An error occured (some may be expected)", e)
 if queries is None:
     queries = []
 print(f"Finished running {len(queries)} files")
