@@ -26,7 +26,7 @@ def importCSV():
                         ON DUPLICATE KEY UPDATE address = %(address)s, city = %(city)s, country=%(country)s, state=%(state)s, zip=%(zip)s, website=%(website)s 
             """
             employee_query = """
-             INSERT INTO IS601_MP2_Employees (first_name, last_name, email, company_id)
+            INSERT INTO IS601_MP2_Employees (first_name, last_name, email, company_id)
                         VALUES (%(first_name)s, %(last_name)s, %(email)s, (SELECT id FROM IS601_MP2_Companies WHERE name = %(company_name)s LIMIT 1))
                         ON DUPLICATE KEY UPDATE first_name=%(first_name)s, last_name = %(last_name)s, email = %(email)s, company_id = (SELECT id FROM IS601_MP2_Companies WHERE name = %(company_name)s LIMIT 1)
             """
@@ -39,7 +39,7 @@ def importCSV():
 
                 # TODO importcsv-4 extract employee data and append to employee list as a dict only with employee data
                 pass
-               
+            
             if len(companies) > 0:
                 print(f"Inserting or updating {len(companies)} companies")
                 try:
@@ -60,6 +60,6 @@ def importCSV():
                     traceback.print_exc()
                     flash("There was an error loading in the csv data", "danger")
             else:
-                 # TODO importcsv-8 display flash message (info) that no companies were loaded
+                # TODO importcsv-8 display flash message (info) that no companies were loaded
                 pass
     return render_template("upload.html")
