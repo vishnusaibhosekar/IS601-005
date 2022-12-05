@@ -19,7 +19,8 @@ def importCSV():
             flash('No selected file', "warning")
             return redirect(request.url)
         # TODO importcsv-1 check that it's a .csv file, return a proper flash message if it's not
-        if os.path.splitext(file.filename)[1] != ".csv":
+        # VB434 12/04/2022
+        if not file.filename.endswith(".csv"):
             flash('Invalid File Type, The file selected is not a .csv file', "warning")
             return redirect(request.url)
         if file and secure_filename(file.filename):
@@ -38,6 +39,7 @@ def importCSV():
             # Note: this reads the file as a stream instead of requiring us to save it
             stream = io.TextIOWrapper(file.stream._file, "UTF8", newline=None)
             # TODO importcsv-2 read the csv file stream as a dict
+            # VB434 12/04/2022
             for row in csv.DictReader(stream, delimiter=','):
                 # print(row) #example
                 # TODO importcsv-3 extract company data and append to company list as a dict only with company data
@@ -70,6 +72,6 @@ def importCSV():
                     traceback.print_exc()
                     flash("There was an error loading in the csv data", "danger")
             else:
-                 # TODO importcsv-8 display flash message (info) that no companies were loaded
+                # TODO importcsv-8 display flash message (info) that no companies were loaded
                 flash("No employees records were loaded", "danger")
     return render_template("upload.html")

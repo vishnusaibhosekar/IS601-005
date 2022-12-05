@@ -10,12 +10,14 @@ def search():
     # DO NOT DELETE PROVIDED COMMENTS
     # TODO search-1 retrieve id, name, address, city, country, state, zip, website, employee count for the company
     # don't do SELECT *
+    # VB434 12/04/2022
     query = "SELECT c.id, c.name, c.address, c.city, c.country, c.state, c.zip, c.website, COUNT(e.id) AS Employees from IS601_MP2_Companies c LEFT JOIN IS601_MP2_Employees e ON e.company_id = c.id WHERE 1=1"
     args = [] # <--- append values to replace %s placeholders
     allowed_columns = ["name", "city", "country", "state"]
 
     allowed_columns_tuples = [(c, c) for c in allowed_columns]
     # TODO search-2 get name, country, state, column, order, limit request args
+    # VB434 12/04/2022
     name = request.args.get("name")
     country = request.args.get("country")
     state = request.args.get("state")
@@ -23,6 +25,7 @@ def search():
     order = request.args.get("order")
     limit = request.args.get("limit", 10)
 
+    # VB434 12/04/2022
     # TODO search-3 append a LIKE filter for name if provided
     if name:
         query += " AND name like %s"
@@ -75,6 +78,7 @@ def search():
 def add():
     form = CompanyForm(request.form)
     if request.method == "POST":
+        # VB434 12/04/2022
         # TODO add-1 retrieve form data for name, address, city, state, country, zip, website
         name = form.name.data
         address = form.address.data
@@ -127,6 +131,7 @@ def add():
 
 @company.route("/edit", methods=["GET", "POST"])
 def edit():
+    # VB434 12/04/2022
     form = CompanyForm(request.form)
     # TODO edit-1 request args id is required (flash proper error message)
     id = request.args.get("id")
@@ -195,10 +200,8 @@ def edit():
 
 @company.route("/delete", methods=["GET"])
 def delete():
-    # TODO delete-1 delete company by id (unallocate any employees)
-    # TODO delete-2 redirect to company search
+    # VB434 12/04/2022
     # TODO delete-3 pass all argument except id to this route
-    # TODO delete-4 ensure a flash message shows for successful delete
     id = request.args.get("id")
     args = {**request.args}
     if id:
@@ -207,6 +210,9 @@ def delete():
             if result.status:
                 flash("Deleted Company record", "success")
         except Exception as e:
+    # TODO delete-4 ensure a flash message shows for successful delete
             flash(f" Following exception occured while deleting the company record: {str(e)}", "danger")
+    # TODO delete-1 delete company by id (unallocate any employees)
         del args["id"]
+    # TODO delete-2 redirect to company search
     return redirect(url_for("company.search", **args))
