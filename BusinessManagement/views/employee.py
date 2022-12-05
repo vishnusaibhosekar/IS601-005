@@ -10,6 +10,7 @@ def search():
     rows = []
     # DO NOT DELETE PROVIDED COMMENTS
     # TODO search-1 retrieve employee id as id, first_name, last_name, email, company_id, company_name using a LEFT JOIN
+    # VB434 12/04/2022
     query = "SELECT e.id, e.first_name, e.last_name, e.email, e.company_id, IF(c.name is not null, c.name,'N/A') AS company_name from IS601_MP2_Employees e LEFT JOIN IS601_MP2_Companies c ON e.company_id = c.id WHERE 1=1"
     args = [] # <--- append values to replace %s placeholders
     allowed_columns = ["first_name", "last_name", "email", "company_name"]
@@ -17,6 +18,7 @@ def search():
     allowed_columns_tuples = [(c, c) for c in allowed_columns]
 
     # TODO search-2 get fn, ln, email, company, column, order, limit from request args
+    # VB434 12/04/2022
     fn = request.args.get("fn")
     ln = request.args.get("ln")
     email = request.args.get("email")
@@ -26,6 +28,7 @@ def search():
     limit = request.args.get("limit", 10)
 
     # TODO search-3 append like filter for first_name if provided
+    # VB434 12/04/2022
     if fn:
         query += " AND first_name like %s"
         args.append(f"%{fn}%")
@@ -79,6 +82,7 @@ def search():
 
 @employee.route("/add", methods=["GET","POST"])
 def add():
+    # VB434 12/04/2022
     form = EmployeeForm(request.form)
     if request.method == "POST":
         # TODO add-1 retrieve form data for first_name, last_name, company, email
@@ -124,6 +128,7 @@ def add():
 
 @employee.route("/edit", methods=["GET", "POST"])
 def edit():
+    # VB434 12/04/2022
     form = EmployeeForm(request.form)
     # TODO edit-1 request args id is required (flash proper error message)
     id = request.args.get("id")
@@ -180,10 +185,8 @@ def edit():
 
 @employee.route("/delete", methods=["GET"])
 def delete():
-    # TODO delete-1 delete employee by id
-    # TODO delete-2 redirect to employee search
+    # VB434 12/04/2022
     # TODO delete-3 pass all argument except id to this route
-    # TODO delete-4 ensure a flash message shows for successful delete
     id = request.args.get("id")
     args = {**request.args}
     if id:
@@ -192,6 +195,9 @@ def delete():
             if result.status:
                 flash("Deleted Employee record", "success")
         except Exception as e:
+    # TODO delete-4 ensure a flash message shows for successful delete
             flash(f" Following exception occured while deleting the employee record: {str(e)}", "danger")
+    # TODO delete-1 delete employee by id
         del args["id"]
+    # TODO delete-2 redirect to employee search
     return redirect(url_for("employee.search", **args))

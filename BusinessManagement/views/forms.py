@@ -2,7 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import EmailField, SubmitField, StringField
 from wtforms.validators import DataRequired, Email, InputRequired, Length, regexp
 
-class CompanyForm(FlaskForm):
+class CompanyForm(FlaskForm): 
+    # VB434 12/04/2022
     name = StringField("Name", validators=[DataRequired(),Length(1,60)])
     address = StringField("Address", validators=[InputRequired(),Length(1,100)])
     city = StringField("City", validators=[InputRequired(),Length(1,20)])
@@ -11,6 +12,7 @@ class CompanyForm(FlaskForm):
     submit = SubmitField("Add Company")
 
 class EmployeeForm(FlaskForm):
+    # VB434 12/04/2022
     first_name = StringField("First Name", validators=[DataRequired(),Length(1,20)])
     last_name = StringField("Last Name", validators=[DataRequired(),Length(1,20)])
     email = EmailField("Email", validators=[DataRequired(), Email()])
