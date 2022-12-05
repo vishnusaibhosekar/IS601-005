@@ -21,7 +21,7 @@ def importCSV():
         # TODO importcsv-1 check that it's a .csv file, return a proper flash message if it's not
         # VB434 12/04/2022
         if not file.filename.endswith(".csv"):
-            flash('Invalid File Type, The file selected is not a .csv file', "warning")
+            flash('Please upload a .csv file', "warning")
             return redirect(request.url)
         if file and secure_filename(file.filename):
             companies = []
@@ -41,7 +41,7 @@ def importCSV():
             # TODO importcsv-2 read the csv file stream as a dict
             # VB434 12/04/2022
             for row in csv.DictReader(stream, delimiter=','):
-                # print(row) #example
+                print(row) #example
                 # TODO importcsv-3 extract company data and append to company list as a dict only with company data
                 if row["company_name"] and row["address"] and row["city"] and row["state"] and row["zip"] and row["web"] and row["country"]:
                     companies.append({"name" : row["company_name"],  "address" :  row["address"], "city" : row["city"], "state" : row["state"], "country" : row["country"], "zip": row["zip"], "website" : row["web"]})
