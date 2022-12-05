@@ -123,7 +123,7 @@ def add():
         except Exception as e:
             # TODO add-7 make message user friendly
             print(e)
-            flash(f" Following exception occured while adding the employee record: {str(e)}", "danger")
+            flash(f"Could not add record. Following exception occured while adding the employee record: {str(e)}", "danger")
     return render_template("add_employee.html", form=form)
 
 @employee.route("/edit", methods=["GET", "POST"])
@@ -169,7 +169,7 @@ def edit():
                     flash("Updated record", "success")
             except Exception as e:
                 # TODO edit-7 make this user-friendly
-                flash(f" Following exception occured while updating the employee: {str(e)}", "danger")
+                flash(f" An error occured while trying to update the record", "danger")
         try:
             # TODO edit-8 fetch the updated data (including company_name)
             # company_name should be 'N/A' if the employee isn't assigned to a copany
