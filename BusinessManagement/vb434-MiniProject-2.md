@@ -274,7 +274,7 @@
 </td></tr>
 </table></td></tr>
 </table></td></tr>
-<table><tr><td> <em>Deliverable 9: </em> Delete Employee and Delete Company </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="http://via.placeholder.com/400x120/f2c037/000000?text=Partial"></td></tr>
+<table><tr><td> <em>Deliverable 9: </em> Delete Employee and Delete Company </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="http://via.placeholder.com/400x120/009955/fff?text=Complete"></td></tr>
 <tr><td><table><tr><td> <em>Sub-Task 1: </em> Screenshot of code for /delete route of employee</td></tr>
 <tr><td><table><tr><td><img width="768px" src="https://user-images.githubusercontent.com/85636187/205552579-78b3af84-6891-4e74-963b-fbcf4631ec8c.png"/></td></tr>
 <tr><td> <em>Caption:</em> <p>deleting employee by id, redirecting to search, all request args (minus id) are<br>passed to the redirect route and success message<br></p>
@@ -291,8 +291,9 @@
 </td></tr>
 </table></td></tr>
 <tr><td> <em>Sub-Task 4: </em> Add a before and after website screenshot of deleting a company</td></tr>
-<tr><td><table><tr><td>Missing Image</td></tr>
-<tr><td> <em>Caption:</em> (missing)</td></tr>
+<tr><td><table><tr><td><img width="768px" src="https://user-images.githubusercontent.com/85636187/206035549-d3c4a2dc-ca98-4f11-b8a3-1a86e3d06a13.png"/></td></tr>
+<tr><td> <em>Caption:</em> <p>Delete Daku Hook Company which was previously updated<br></p>
+</td></tr>
 </table></td></tr>
 </table></td></tr>
 <table><tr><td> <em>Deliverable 10: </em> Test Cases and Misc </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="http://via.placeholder.com/400x120/009955/fff?text=Complete"></td></tr>
