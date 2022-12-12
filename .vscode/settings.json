@@ -8,6 +8,7 @@
         "dotenv",
         "jsons",
         "mypath",
-        "pyfile"
+        "pyfile",
+        "VSHOP"
     ]
 }
