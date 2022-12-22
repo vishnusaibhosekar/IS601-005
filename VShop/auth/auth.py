@@ -45,7 +45,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         is_valid = True
-        email = form.email.data # email or username
+        email = form.email.data
         password = form.password.data
         if is_valid:
             try:
@@ -55,7 +55,6 @@ def login():
                     if bcrypt.check_password_hash(hash, password):
                         del result.row["password"]
                         user = User(**result.row)
-                        # get roles
                         result = DB.selectAll("""
                         SELECT name FROM IS601_Roles r JOIN IS601_UserRoles ur on r.id = ur.role_id WHERE ur.user_id = %s AND r.is_active = 1 AND ur.is_active = 1
                         """, user.id)
@@ -67,7 +66,6 @@ def login():
                         success = login_user(user)
                         
                         if success:
-                            # store user object in session as json
                             session["user"] = user.toJson()
                             flash("Log in successful", "success")
                             return redirect(url_for("auth.landing_page"))
@@ -90,13 +88,10 @@ def landing_page():
 @auth.route("/logout", methods=["GET"])
 def logout():
     logout_user()
-    # Remove session keys set by Flask-Principal
     for key in ('identity.name', 'identity.auth_type'):
         session.pop(key, None)
-
-    # Tell Flask-Principal the user is anonymous
-    identity_changed.send(current_app._get_current_object(),
-                            identity=AnonymousIdentity())
+        
+    identity_changed.send(current_app._get_current_object(), identity=AnonymousIdentity())
     flash("Successfully logged out", "success")
     return redirect(url_for("auth.login"))
 
@@ -112,14 +107,12 @@ def profile():
         current_password = form.current_password.data
         password = form.password.data
         confirm = form.confirm.data
-        # handle password change only if all 3 are provided
+        
         if current_password and password and confirm:
             try:
                 result = DB.selectOne("SELECT password FROM IS601_Users where id = %s", user_id)
                 if result.status and result.row:
-                    # verify current password
                     if bcrypt.check_password_hash(result.row["password"], current_password):
-                        # update new password
                         hash = bcrypt.generate_password_hash(password)
                         try:
                             result = DB.update("UPDATE IS601_Users SET password = %s WHERE id = %s", hash, user_id)
@@ -133,21 +126,19 @@ def profile():
                 flash(se, "danger")
         
         if is_valid:
-            try: # update email, username
+            try:
                 result = DB.update("UPDATE IS601_Users SET email = %s, username = %s WHERE id = %s", email, username, user_id)
                 if result.status:
                     flash("Saved profile", "success")
             except Exception as e:
                 check_duplicate(e)
     try:
-        # get latest info if anything changed
         result = DB.selectOne("SELECT id, email, username FROM IS601_Users where id = %s", user_id)
         if result.status and result.row:
             user = User(**result.row)
             print("loading user", user)
             form.username.data = user.username
             form.email.data = user.email
-            # TODO update session
             current_user.email = user.email
             current_user.username = user.username
             session["user"] = current_user.toJson()
