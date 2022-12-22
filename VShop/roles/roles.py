@@ -6,9 +6,6 @@ from werkzeug.datastructures import MultiDict
 from roles.permissions import admin_permission
 roles = Blueprint('roles', __name__, url_prefix='/roles',template_folder='templates')
 
-# uses admin_permission from roles.permissions (flask_principal way)
-# https://stackoverflow.com/a/20069821 (for http_exception)
-
 @roles.route("/add", methods=["GET","POST"])
 @login_required
 @admin_permission.require(http_exception=403)
@@ -45,7 +42,6 @@ def edit():
         result = DB.selectOne("SELECT name, description, is_active from IS601_Roles WHERE id = %s", id)
         if result.status and result.row:
             print(result.row)
-            # https://stackoverflow.com/a/37125336
             form = RoleForm(MultiDict(result.row))
     except Exception as e:
         print("Error getting role", e)
@@ -71,7 +67,6 @@ def list():
 @admin_permission.require(http_exception=403)
 def delete():
     id = request.args.get("id")
-    # make a mutable dict
     args = {**request.args}
     if id:
         try:
@@ -80,12 +75,8 @@ def delete():
                 flash("Deleted role", "success")
         except Exception as e:
             print(e)
-            # TODO make this user-friendly
             flash(e, "danger")
-        # TODO pass along feedback
-
-        # remove the id args since we don't need it in the list route
-        # but we want to persist the other query args
+            
         del args["id"]
     else:
         flash("No id present", "warning")
@@ -121,12 +112,11 @@ def assign():
 @login_required
 @admin_permission.require(http_exception=403)
 def apply():
-    # https://stackoverflow.com/a/24808706
     users = request.form.getlist("users[]")
     roles = request.form.getlist("roles[]")
     print(users, roles)
     args = {**request.args}
-    if users and roles: # we need both for this to work
+    if users and roles:
         mappings = []
         for user in users:
             for role in roles:

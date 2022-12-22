@@ -25,20 +25,19 @@
         <tbody>
             <tr>
                 <td>
-                    <!-- users -->
-                    <table class="table" style="color: wheat;">
+                    <table class="table table-bordered" style="color: black;">
                         {% set rows = users %}
                         {% if rows and rows|length > 0 %}
                         <thead>
-                            <tr class="text-capitalize">
+                            <tr class="text-capitalize" style="text-align: center;">
                                 {% for r in rows[0] %}
                                 <th>{{r}}</th>
                                 {% endfor %}
-                                <th>Select</th>
+                                <th style="text-align: left; width: 3em;">Select</th>
                             </tr>
                         </thead>
                         {% for r in rows %}
-                        <tr>
+                        <tr style="text-align: center;">
                             {% for v in r.values() %}
                             <td>{{v}}</td>
                             {% endfor %}
@@ -52,27 +51,25 @@
                         <p>No results to show</p>
                         {% endif %}
                     </table>
-                    <!-- end users -->
                 </td>
                 <td>
-                    <!-- roles -->
-                    <table class="table" style="color: deepskyblue;">
+                    <table class="table table-bordered" style="color: black;">
                         {% set rows = roles %}
                         {% if rows and rows|length > 0 %}
                         <thead>
-                            <tr class="text-capitalize">
+                            <tr class="text-capitalize" style="text-align: center;">
                                 {% for r in rows[0] %}
-                                <th>{{r}}</th>
+                                <th>Role {{r if r!="id" else "Id"}}</th>
                                 {% endfor %}
-                                <th>Select</th>
+                                <th style="text-align: left; width: 3em;">Select</th>
                             </tr>
                         </thead>
                         {% for r in rows %}
-                        <tr>
+                        <tr style="text-align: center;">
                             {% for v in r.values() %}
                             <td>{{v}}</td>
                             {% endfor %}
-                            <td>
+                            <td style="text-align: left;">
                                 <input form="apply" type="checkbox" class="form-check"
                                     name="roles[]" value="{{r.get('id')}}" />
                             </td>
@@ -82,12 +79,10 @@
                         <p>No results to show</p>
                         {% endif %}
                     </table>
-                    <!-- end roles -->
                 </td>
             </tr>
         </tbody>
     </table>
-
 </div>
 </div>
 {% endblock %}

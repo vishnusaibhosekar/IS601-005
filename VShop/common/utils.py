@@ -1,7 +1,5 @@
-import jsons # https://jsons.readthedocs.io/en/latest/index.html
-# using jsons instead of json for better nested object serialization
+import jsons
 
-# helper to serialize any class
 class JsonSerializable(object):
     def toJson(self):
         return jsons.dumps(self)

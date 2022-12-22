@@ -16,11 +16,11 @@ class DBResponse:
         if row is not None:
             self.row = row
         else:
-            self.row = None # return none
+            self.row = None
         if rows is not None:
             self.rows = rows
         else:
-            self.rows = [] # return empty list
+            self.rows = []
     def __str__(self):
         return json.dumps(self.__dict__)
 
@@ -35,7 +35,6 @@ class DB:
             status = False
             if not isMany or op == CRUD.READ:
                 if args is not None and len(args) > 0:
-                    # convert dict for named placeholder mapping
                     if type(args[0]) is dict:
                         args = {k: v for d in args for k, v in d.items()}
                     status = cursor.execute(queryString, args)
@@ -50,7 +49,6 @@ class DB:
             if op == CRUD.READ:
                 if not isMany:
                     result = cursor.fetchone()
-                    # response = {"status": True if status is None else False, "row": result}
                     status = True if status is None else False
                     response = DBResponse(status, result)
                 else:
@@ -69,8 +67,6 @@ class DB:
             if e.errno == -1:
                 print("closing due to error")
                 DB.close()
-            # converting to a plain exception so other modules don't need to import mysql.connector.Error
-            # this will let you more easily swap out DB connectors without needing to refactor your code, just this class
             raise Exception(e)
         return response 
 
@@ -92,7 +88,6 @@ class DB:
             return DB.insertOne(queryString, )
         else:
             return DB.__runQuery(CRUD.ALTER, False, queryString)
-            #raise Exception("Please use one of the abstracted methods for this query")
 
     @staticmethod
     def insertMany(queryString, data):
@@ -147,5 +142,4 @@ class DB:
         return DB.db
 
 if __name__ == "__main__":
-    # verifies connection works
     print(DB.selectOne("SELECT 'test' from dual"))
