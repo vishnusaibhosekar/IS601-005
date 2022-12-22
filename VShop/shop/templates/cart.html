@@ -6,7 +6,10 @@
 <div class="container-fluid">
     <div class="h3 text-center m-3">Cart</div>
     {% if rows | length < 1 %}
-        <div class="h4 text-center m-3">Your cart is empty. Go <a href="{{url_for('shop.shop_list')}}" class="link-warning">Shop</a> and add products to the cart!</div>
+        <div class="h4 text-center m-3">
+            <img src="https://user-images.githubusercontent.com/85636187/209202077-a1247184-3ff4-49c7-bee4-f8e7f6949760.png" style="float: inline-start;" />
+            Your cart is empty :( <br><br> Go <a href="{{url_for('shop.shop_list')}}" class="link-primary">Shop</a> and add products to the cart!
+        </div>
     {% else %}
         <table class="table table-bordered text-dark bg-light px-3" style="text-align: center;">
             <thread>
