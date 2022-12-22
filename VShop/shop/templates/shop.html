@@ -62,7 +62,7 @@
                     </h5>
                     <form action="{{url_for('shop.cart')}}" method="POST" class="row row-cols-lg-auto g-0 mt-2" style="justify-content: space-between;">
                         <input type="hidden" name="id" value="{{row['id']}}" />
-                        <input type="number" class="form-control col-8" name="quantity" value="1" style="flex-basis: 70%;" />
+                        <input type="number" class="form-control col-8" name="quantity" value="1" min="1" max="{{row['stock']}}" style="flex-basis: 70%;" />
                         <div class="col-3">
                             <input type="submit" value="+Add" class="btn btn-light" />
                         </div>
