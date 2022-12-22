@@ -314,7 +314,6 @@ def purchase():
             if not has_error:
                 result = DB.delete("DELETE FROM IS601_Cart WHERE user_id = %s", current_user.get_id())
                 DB.getDB().commit()
-                flash("Purchase successful!", "success")
             else:
                 return redirect(url_for("shop.cart"))
         

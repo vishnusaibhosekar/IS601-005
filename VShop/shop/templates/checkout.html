@@ -19,7 +19,7 @@
             {% for row in rows %}
             <tr style="vertical-align: middle;">
                 <td>
-                    <a href="{{url_for('shop.productDetails', id=row['product_id'],action='view')}}" style="color: white;">{{row["name"]}}</a>
+                    <a href="{{url_for('shop.productDetails', id=row['product_id'],action='view')}}" style="color: black;">{{row["name"]}}</a>
                 </td>
                 <td style="width:8em">
                     <input type="number" class="form-control" name="quantity"

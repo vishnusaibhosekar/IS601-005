@@ -64,7 +64,7 @@
                         <input type="hidden" name="id" value="{{row['id']}}" />
                         <input type="number" class="form-control col-8" name="quantity" value="1" min="1" max="{{row['stock']}}" style="flex-basis: 70%;" />
                         <div class="col-3">
-                            <input type="submit" value="+Add" class="btn btn-light" />
+                            <input type="submit" value="Add" class="btn btn-light" />
                         </div>
                     </form>
                     {% if current_user.is_authenticated %}
