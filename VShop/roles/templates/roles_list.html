@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}List Roles{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="h1 text-center m-3">List Roles</div>
+    <table class="table table-bordered" style="color: black; text-align: justify;">
+        {% if rows and rows|length > 0 %}
+        <thead>
+            <tr class="text-capitalize" style="text-align: center;">
+                {% for r in rows[0] %}
+                <th>{{r}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        {% for r in rows %}
+        <tr>
+            {% for v in r.values() %}
+            <td style="text-align: center;">{{v}}</td>
+            {% endfor %}
+            <td style="text-align: center;">
+                <a href="{{url_for('roles.edit', id=r.get('id'))}}" class="btn btn-secondary btn-sm">Edit</a>
+                <a href="{{url_for('roles.delete', id=r.get('id'), **request.args)}}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <p>No results to show</p>
+        {% endif %}
+    </table>
+</div>
+</div>
+{% endblock %}

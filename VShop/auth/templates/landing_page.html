@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block title %}Landing Page{% endblock %}
+{% block content %}
+<div class="container-fluid p-3">
+    <img src="https://user-images.githubusercontent.com/85636187/209196764-91a0b9fb-808a-4a74-a307-45742bd9ee68.png" alt="" height="500px" width="500px" style="float: right; margin: 0 0 0 15px;"/>
+    <div class="h1">Welcome to VShop, {{current_user.username}}</div>
+    <div> We sell all kinds of stuff </div>
+</div>
+{% endblock %}

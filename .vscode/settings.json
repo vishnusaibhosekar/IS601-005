@@ -6,8 +6,12 @@
     "python.testing.pytestEnabled": true,
     "cSpell.words": [
         "dotenv",
+        "endmacro",
+        "formhelpers",
         "jsons",
         "mypath",
-        "pyfile"
+        "pyfile",
+        "VSHOP",
+        "wtforms"
     ]
 }

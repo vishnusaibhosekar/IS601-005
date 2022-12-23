@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% block title %}Assign Roles{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="h1 m-3">Assign Roles</div>
+    <div class="m-3" style="display: flex; justify-content: space-between;">
+        <form method="GET" style="display: flex; align-items: center;">
+            <input type="text" placeholder="Partial email address"
+                value="{{request.args.get('email', '')}}" name="email" style="padding: 6px 8px; border-radius: 5px;" />
+            <input type="submit" class="btn btn-secondary mx-2" value="Search" />
+        </form>
+        <form id="apply" method="POST"
+            action="{{url_for('roles.apply')}}?email={{request.args.get('email', '')}}">
+            <!-- will map elements via form attribute on the element itself by form id -->
+            <input type="submit" class="btn btn-primary" value="Apply Roles" />
+        </form>
+    </div>
+    <table class="table" style="color: white;">
+        <thead>
+            <tr>
+                <td>Users</td>
+                <td>Roles</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <table class="table table-bordered" style="color: black;">
+                        {% set rows = users %}
+                        {% if rows and rows|length > 0 %}
+                        <thead>
+                            <tr class="text-capitalize" style="text-align: center;">
+                                {% for r in rows[0] %}
+                                <th>{{r}}</th>
+                                {% endfor %}
+                                <th style="text-align: left; width: 3em;">Select</th>
+                            </tr>
+                        </thead>
+                        {% for r in rows %}
+                        <tr style="text-align: center;">
+                            {% for v in r.values() %}
+                            <td>{{v}}</td>
+                            {% endfor %}
+                            <td>
+                                <input form="apply" type="checkbox" class="form-check"
+                                    name="users[]" value="{{r.get('id')}}" />
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <p>No results to show</p>
+                        {% endif %}
+                    </table>
+                </td>
+                <td>
+                    <table class="table table-bordered" style="color: black;">
+                        {% set rows = roles %}
+                        {% if rows and rows|length > 0 %}
+                        <thead>
+                            <tr class="text-capitalize" style="text-align: center;">
+                                {% for r in rows[0] %}
+                                <th>Role {{r if r!="id" else "Id"}}</th>
+                                {% endfor %}
+                                <th style="text-align: left; width: 3em;">Select</th>
+                            </tr>
+                        </thead>
+                        {% for r in rows %}
+                        <tr style="text-align: center;">
+                            {% for v in r.values() %}
+                            <td>{{v}}</td>
+                            {% endfor %}
+                            <td style="text-align: left;">
+                                <input form="apply" type="checkbox" class="form-check"
+                                    name="roles[]" value="{{r.get('id')}}" />
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <p>No results to show</p>
+                        {% endif %}
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+{% endblock %}
