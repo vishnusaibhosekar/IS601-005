@@ -9,6 +9,8 @@ from roles.permissions import admin_permission
 from flask_login import login_required, current_user
 shop = Blueprint('shop', __name__, url_prefix='/',template_folder='templates')
 
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/admin/product", methods=["GET","POST"])
 @admin_permission.require(http_exception=403)
 def product():
@@ -52,6 +54,8 @@ def product():
             flash("product not found", "danger")
     return render_template("product.html", form=form, type=type)
 
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/shop", methods=["GET","POST"])
 def shop_list():
     rows = []
@@ -93,7 +97,9 @@ def shop_list():
         print("Error fetching products", e)
         flash("There was a problem loading products", "danger")
     return render_template("shop.html", rows=rows, category_list=category_list)
-    
+
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/admin/product/list", methods=["GET","POST"])
 @admin_permission.require(http_exception=403)
 def product_list():
@@ -107,6 +113,8 @@ def product_list():
         flash("There was a problem loading products", "danger")
     return render_template("product_list.html", rows=rows)
 
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/admin/productDetails", methods=["GET"])
 def productDetails():
     id = request.args.get("id", None)
@@ -121,6 +129,8 @@ def productDetails():
             flash("product not found", "danger")
     return render_template("product.html", row=row, type=type)
 
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/cart", methods=["GET","POST"])
 @login_required
 def cart():
@@ -188,6 +198,8 @@ def cart():
                     print("Error deleting product", e)
                     flash("Error deleting product from cart", "danger")
     rows = []
+    # UCID: vb434
+        # Date: 12/22/2022
     try:
         result = DB.selectAll("""SELECT c.id, product_id, name, c.quantity, (c.quantity * c.cost) as subtotal 
         FROM IS601_Cart c JOIN IS601_Products i on c.product_id = i.id
@@ -199,7 +211,9 @@ def cart():
         print("Error getting cart", e)
         flash("Error fetching cart", "danger")
     return render_template("cart.html", rows=rows)
-    
+
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/admin/products/delete", methods=["GET"])
 @admin_permission.require(http_exception=403)
 def delete():
@@ -214,6 +228,8 @@ def delete():
             flash("Error deleting product", "danger")
     return redirect(url_for("shop.product_list"))
 
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/checkout", methods=["GET","POST"])
 @login_required
 def checkout():
@@ -232,6 +248,8 @@ def checkout():
         flash("Error fetching cart", "danger")
     return render_template("checkout.html", form=form, rows=rows)
 
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/purchase", methods=["GET","POST"])
 @login_required
 def purchase():
@@ -250,7 +268,6 @@ def purchase():
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         zipcode = request.form.get('zip')
-
         try:
             DB.getDB().autocommit = False
             
@@ -261,6 +278,8 @@ def purchase():
             if result.status and result.rows:
                 cart = result.rows
             has_error = False
+            # UCID: vb434
+            # Date: 12/22/2022
             for item in cart:
                 if item["quantity"] > item["stock"]:
                     flash(f"Product {item['name']} doesn't have enough stock left", "warning")
@@ -293,6 +312,8 @@ def purchase():
                     order["payment_method"] = paymentMethod
                     order["total_price"] = total
                     order["money_received"] = amountPaid
+            # UCID: vb434
+            # Date: 12/22/2022
             if order_id > -1 and not has_error:
                 result = DB.insertOne("""INSERT INTO IS601_OrderItems (quantity, cost, order_id, product_id, user_id)
                 SELECT quantity, cost, %s, product_id, user_id FROM IS601_Cart c WHERE c.user_id = %s""",
@@ -311,12 +332,13 @@ def purchase():
                     flash("Error updating stock", "danger")
                     has_error = True
                     DB.getDB().rollback()
+            # UCID: vb434
+            # Date: 12/22/2022
             if not has_error:
                 result = DB.delete("DELETE FROM IS601_Cart WHERE user_id = %s", current_user.get_id())
                 DB.getDB().commit()
             else:
-                return redirect(url_for("shop.cart"))
-        
+                return redirect(url_for("shop.cart"))        
         except Exception as e:
             print("Transaction exception", e)
             flash("Something went wrong", "danger")
@@ -326,7 +348,8 @@ def purchase():
         
     return render_template("order_summary.html", rows=cart, order=order)
 
-
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/orders", methods=["GET"])
 @login_required
 def orders():
@@ -342,6 +365,8 @@ def orders():
         flash("Error fetching orders", "danger")
     return render_template("orders.html", rows=rows)
 
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/order", methods=["GET"])
 @login_required
 def order():
@@ -370,6 +395,8 @@ def order():
         flash("Error fetching order", "danger")
     return render_template("order.html", rows=cart, orders=order)
 
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/admin/orders", methods=["GET"])
 @login_required
 @admin_permission.require(http_exception=403)
@@ -386,6 +413,8 @@ def all_orders():
         flash("Error fetching orders", "danger")
     return render_template("admin_orders.html", rows=rows)
 
+# UCID: vb434
+# Date: 12/22/2022
 @shop.route("/admin/orderdetail", methods=["GET"])
 @login_required
 @admin_permission.require(http_exception=403)
@@ -403,7 +432,7 @@ def admin_order():
             """, id)
         if result.status and result.rows:
             cart = result.rows
-
+            
         result = DB.selectAll("""SELECT id, total_price, address, zip, payment_method, money_received, first_name, last_name, user_id
         FROM  IS601_Orders 
         WHERE id = %s
